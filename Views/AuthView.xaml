@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="up.Views.AuthView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <UserControl.Resources>
+        <!-- Конвертер для переключения видимости элементов в зависимости от режима (вход/регистрация) -->
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,4,0,12"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#CCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="0,18,0,5"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#555"/>
+            <Setter Property="Margin" Value="0,8,0,2"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F0F2F5">
+        <Border Background="White" CornerRadius="8" Padding="40" Width="380" VerticalAlignment="Center"
+                BorderBrush="#DDD" BorderThickness="1" HorizontalAlignment="Center">
+            <StackPanel>
+                <!-- Заголовки: отображаются в зависимости от режима -->
+                <TextBlock Text="Авторизация" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,15"
+                           Visibility="{Binding IsLoginMode, Converter={StaticResource BoolToVis}}"/>
+                <TextBlock Text="Регистрация" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,15"
+                           Visibility="{Binding IsRegisterMode, Converter={StaticResource BoolToVis}}"/>
+
+                <!-- Поля ввода: логин и пароль видны всегда -->
+                <TextBlock Text="Логин" Style="{StaticResource LabelStyle}"/>
+                <TextBox Text="{Binding Login}"/>
+
+                <TextBlock Text="Пароль" Style="{StaticResource LabelStyle}"/>
+                <TextBox Text="{Binding Password}"/>
+
+                <!-- Дополнительные поля только для регистрации -->
+                <TextBlock Text="Email" Style="{StaticResource LabelStyle}" Visibility="{Binding IsRegisterMode, Converter={StaticResource BoolToVis}}"/>
+                <TextBox Text="{Binding Email}" Visibility="{Binding IsRegisterMode, Converter={StaticResource BoolToVis}}"/>
+
+                <TextBlock Text="Никнейм" Style="{StaticResource LabelStyle}" Visibility="{Binding IsRegisterMode, Converter={StaticResource BoolToVis}}"/>
+                <TextBox Text="{Binding Nickname}" Visibility="{Binding IsRegisterMode, Converter={StaticResource BoolToVis}}"/>
+
+                <!-- Кнопки действий -->
+                <Button Content="Войти" Command="{Binding LoginCommand}" Visibility="{Binding IsLoginMode, Converter={StaticResource BoolToVis}}"/>
+                <Button Content="Зарегистрироваться" Command="{Binding RegisterCommand}" Visibility="{Binding IsRegisterMode, Converter={StaticResource BoolToVis}}"/>
+
+                <!-- Переключение между режимами (гиперссылки) -->
+                <TextBlock Margin="0,12" HorizontalAlignment="Center" FontSize="13" Visibility="{Binding IsLoginMode, Converter={StaticResource BoolToVis}}">
+                    <Run Text="Нет аккаунта? "/>
+                    <Hyperlink Command="{Binding SwitchModeCommand}"><Run Text="Зарегистрироваться"/></Hyperlink>
+                </TextBlock>
+                <TextBlock Margin="0,12" HorizontalAlignment="Center" FontSize="13" Visibility="{Binding IsRegisterMode, Converter={StaticResource BoolToVis}}">
+                    <Run Text="Уже есть аккаунт? "/>
+                    <Hyperlink Command="{Binding SwitchModeCommand}"><Run Text="Войти"/></Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

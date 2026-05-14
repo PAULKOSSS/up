@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="up.Views.BookEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F9FAFB">
+
+    <UserControl.Resources>
+        <!-- Конвертер для скрытия/показа элементов -->
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <!-- Форма для добавления/редактирования книги -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30" MaxWidth="800">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок: отображается в зависимости от режима (редактирование/добавление) -->
+            <TextBlock Grid.Row="0" Text="{Binding IsEditMode, StringFormat='Редактирование книги (ID: {0})'}" 
+                       FontSize="24" FontWeight="Bold" Margin="0,0,0,20"/>
+            <TextBlock Grid.Row="0" Text="Добавление новой книги" FontSize="24" FontWeight="Bold" Margin="0,0,0,20"
+                       Visibility="{Binding IsEditMode, Converter={StaticResource BoolToVis}, ConverterParameter=Inverse}"/>
+
+            <!-- Название (обязательное поле) -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,15">
+                <TextBlock Text="Название книги *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" Padding="8" FontSize="14"/>
+            </StackPanel>
+
+            <!-- Ссылка на обложку -->
+            <StackPanel Grid.Row="2" Margin="0,0,0,15">
+                <TextBlock Text="Ссылка на обложку (URL)" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}" Padding="8" FontSize="14"/>
+            </StackPanel>
+
+            <!-- Описание книги -->
+            <StackPanel Grid.Row="3" Margin="0,0,0,15">
+                <TextBlock Text="Описание" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" 
+                         TextWrapping="Wrap" Height="80" Padding="8" FontSize="14"/>
+            </StackPanel>
+
+            <!-- Выбор жанров (список CheckBox) -->
+            <StackPanel Grid.Row="4" Margin="0,0,0,15">
+                <TextBlock Text="Жанры" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <ItemsControl ItemsSource="{Binding AvailableGenres}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" Margin="0,5,15,5" FontSize="13"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <!-- Полный текст книги (обязательное поле) -->
+            <StackPanel Grid.Row="5" Margin="0,0,0,20">
+                <TextBlock Text="Текст книги *" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" 
+                         TextWrapping="Wrap" Height="250" Padding="8" FontSize="14" FontFamily="Consolas"/>
+            </StackPanel>
+
+            <!-- Кнопки управления -->
+            <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Отмена" Command="{Binding CancelCommand}" Width="100" Height="35" Margin="0,0,10,0"/>
+                <Button Content="Сохранить" Command="{Binding SaveCommand}" Width="120" Height="35" 
+                        Background="#10B981" Foreground="White" BorderThickness="0" Cursor="Hand"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

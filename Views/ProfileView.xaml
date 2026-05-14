@@ -1,0 +1,137 @@
+﻿<UserControl x:Class="up.Views.ProfileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F9FAFB">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Информация о пользователе -->
+                <RowDefinition Height="Auto"/>
+                <!-- Предупреждение о заморозке -->
+                <RowDefinition Height="Auto"/>
+                <!-- Заявка на роль автора -->
+                <RowDefinition Height="*"/>
+                <!-- Отзывы пользователя -->
+            </Grid.RowDefinitions>
+
+            <!-- 1. Блок с информацией о пользователе -->
+            <Border Grid.Row="0" Background="White" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="12" Padding="25" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text=" Информация о пользователе" FontSize="20" FontWeight="Bold" Foreground="#1F2937" Margin="0,0,0,20"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Никнейм:" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,20,10"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Nickname}" FontSize="16" FontWeight="Bold" Foreground="#1F2937" Margin="0,0,0,10"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Логин:" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,20,10"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Login}" FontSize="16" Foreground="#1F2937" Margin="0,0,0,10"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Email:" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,20,10"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Email}" FontSize="16" Foreground="#1F2937" Margin="0,0,0,10"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Роль:" FontWeight="SemiBold" Foreground="#6B7280" Margin="0,0,20,0"/>
+                        <Border Grid.Row="3" Grid.Column="1" Background="#E0E7FF" CornerRadius="6" Padding="10,5" HorizontalAlignment="Left">
+                            <TextBlock Text="{Binding RoleName}" FontSize="14" FontWeight="SemiBold" Foreground="#3730A3"/>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 2. Предупреждение о заморозке (видно только если IsFrozen == true) -->
+            <Border Grid.Row="1" Background="#FEE2E2" BorderBrush="#FCA5A5" BorderThickness="2" CornerRadius="12" Padding="20" Margin="0,0,0,20"
+                    Visibility="{Binding IsFrozen, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock Text="⚠️ Ваш аккаунт заморожен!" FontSize="18" FontWeight="Bold" Foreground="#991B1B" Margin="0,0,0,10"/>
+                    <Border Background="White" BorderBrush="#FCA5A5" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="Причина заморозки:" FontWeight="SemiBold" Foreground="#7F1D1D" Margin="0,0,0,5"/>
+                            <TextBlock Text="{Binding FreezeReason}" TextWrapping="Wrap" Foreground="#991B1B" FontStyle="Italic"/>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="Вы можете подать апелляцию для разблокировки." Foreground="#7F1D1D" Margin="0,0,0,15" TextWrapping="Wrap"/>
+                    <Button Content="📩 Подать апелляцию" Command="{Binding AppealFreezeCommand}" Background="#EF4444" Foreground="White" Padding="15,8" HorizontalAlignment="Left" Width="200" FontSize="14" BorderThickness="0" Cursor="Hand"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 3. Блок подачи заявки на роль автора (видно только читателям без активной заявки) -->
+            <Border Grid.Row="2" Background="#D1FAE5" BorderBrush="#6EE7B7" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,20"
+                    Visibility="{Binding IsAuthorRequestButtonVisible, Converter={StaticResource BoolToVis}}">
+                <StackPanel>
+                    <TextBlock Text="✍️ Хотите стать автором?" FontSize="16" FontWeight="Bold" Foreground="#065F46" Margin="0,0,0,10"/>
+                    <TextBlock Text="Подайте заявку на получение роли автора, чтобы публиковать свои книги." Foreground="#047857" Margin="0,0,0,15" TextWrapping="Wrap"/>
+                    <Button Content="Подать заявку на роль автора" Command="{Binding RequestAuthorCommand}" Background="#10B981" Foreground="White" Padding="15,8" HorizontalAlignment="Left" Width="220" FontSize="14" BorderThickness="0" Cursor="Hand"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Сообщение об уже поданной заявке -->
+            <TextBlock Grid.Row="2" Text="✅ Заявка на роль автора отправлена и ожидает рассмотрения." FontSize="14" FontWeight="SemiBold" Foreground="#059669" Margin="0,20,0,0"
+                       Visibility="{Binding IsAuthorRequestPending, Converter={StaticResource BoolToVis}}"/>
+
+            <!-- 4. Список отзывов пользователя -->
+            <Border Grid.Row="3" Background="White" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="12" Padding="20">
+                <StackPanel>
+                    <TextBlock Text="💬 Мои отзывы" FontSize="20" FontWeight="Bold" Foreground="#1F2937" Margin="0,0,0,20"/>
+
+                    <!-- Сообщение, если отзывов нет -->
+                    <TextBlock Text="У вас пока нет отзывов" Foreground="#6B7280" FontStyle="Italic" HorizontalAlignment="Center" Margin="0,20,0,0"
+                               Visibility="{Binding HasNoReviews, Converter={StaticResource BoolToVis}}"/>
+
+                    <!-- Таблица отзывов (скрывается, если отзывов нет) -->
+                    <ListView ItemsSource="{Binding Reviews}" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              Visibility="{Binding HasNoReviews, Converter={StaticResource BoolToVis}, ConverterParameter=Inverse}">
+                        <ListView.Style>
+                            <Style TargetType="ListView">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasNoReviews}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Style>
+
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0,0,0,15"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#F9FAFB" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Padding="15">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                            <TextBlock Text="{Binding BookName}" FontWeight="Bold" FontSize="15" Foreground="#1F2937"/>
+                                            <TextBlock Text=" — " Foreground="#6B7280" Margin="5,0"/>
+                                            <TextBlock Text="{Binding Rating}" Foreground="#F59E0B" FontWeight="Bold" FontSize="14"/>
+                                            <TextBlock Text="/10" Foreground="#6B7280" FontSize="12"/>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Foreground="#374151" Margin="0,0,0,8"/>
+                                        <TextBlock Text="{Binding Date, StringFormat='dd.MM.yyyy HH:mm'}" Foreground="#9CA3AF" FontSize="11" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9d1f4aa31d064e9fafdc8bab6fdcb78e" Name="Diagram1">
+        <EntityTypeShape EntityType="UPModel.Books" Width="1.5" PointX="5.25" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.BooksGenres" Width="1.5" PointX="7.5" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.BookStatuses" Width="1.5" PointX="8.25" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Complaints" Width="1.5" PointX="7.5" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Genres" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.ReadingLists" Width="1.5" PointX="10.5" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Reviews" Width="1.5" PointX="7.5" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.RoleApplications" Width="1.5" PointX="5.25" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Roles" Width="1.5" PointX="0.75" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.TargetTypes" Width="1.5" PointX="8.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.UnfreezeApplications" Width="1.5" PointX="10.5" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UPModel.Users" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
+        <AssociationConnector Association="UPModel.FK__Books__UserId__59FA5E80" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__BooksGenr__BookI__5AEE82B9" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__Complaint__BookI__5CD6CB2B" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__ReadingLi__BookI__6754599E" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__Reviews__BookId__628FA481" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__UnfreezeA__Targe__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__BooksGenr__Genre__5BE2A6F2" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__ReadingLi__BookS__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__Complaint__Revie__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__Complaint__UserI__5EBF139D" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK_Complaints_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__ReadingLi__UserI__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__Reviews__UserId__6383C8BA" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__RoleAppli__UserI__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__Users__RoleId__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__UnfreezeA__Targe__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="UPModel.FK__UnfreezeA__UserI__6754599E" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

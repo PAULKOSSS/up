@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="up.Views.BookDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F9FAFB">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <!-- Две колонки: слева информация о книге, справа вкладки с текстом и отзывами -->
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Левая колонка: обложка, название, автор, жанры, кнопки -->
+        <StackPanel Grid.Column="0" Margin="0,0,20,0">
+            <Image Source="{Binding ImageUrl}" Height="350" Stretch="Uniform" Margin="0,0,0,15"/>
+            <TextBlock Text="{Binding Title}" FontSize="20" FontWeight="Bold" TextWrapping="Wrap"/>
+            <TextBlock Text="{Binding AuthorName}" FontSize="14" Foreground="#555" Margin="0,5,0,10"/>
+            <TextBlock Text="{Binding Genres}" FontSize="12" Foreground="#888" FontStyle="Italic" TextWrapping="Wrap" Margin="0,0,0,15"/>
+
+            <Button Content="📖 Добавить в список" Command="{Binding AddToListCommand}"
+                    Background="#3B82F6" Foreground="White" Padding="10,6" Margin="0,15,0,0"
+                    HorizontalAlignment="Left" Width="180"/>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Рейтинг: " FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding AverageRating, StringFormat=F1}" Foreground="#F59E0B" FontWeight="Bold" FontSize="16"/>
+            </StackPanel>
+
+            <!-- Кнопки жалоб -->
+            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                <Button Content="🚩 Жалоба на книгу" Command="{Binding ReportBookCommand}" 
+                        Background="#EF4444" Foreground="White" Padding="8,5" Margin="0,0,5,0"/>
+                <Button Content="Жалоба на автора" Command="{Binding ReportAuthorCommand}" 
+                        Background="#EF4444" Foreground="White" Padding="8,5"/>
+            </StackPanel>
+
+            <!-- Кнопка заморозки книги (видна только администратору) -->
+            <Button Content="❄️ Заморозить/Разморозить книгу" Command="{Binding FreezeBookCommand}" 
+                    Background="#F59E0B" Foreground="White" Padding="8,5" Margin="0,10,0,0"
+                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"/>
+        </StackPanel>
+
+        <!-- Правая колонка: вкладки -->
+        <Grid Grid.Column="1">
+            <TabControl>
+                <!-- Вкладка чтения текста книги с собственной прокруткой -->
+                <TabItem Header="📖 Читать книгу">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  Padding="20"
+                                  Background="#F9FAFB">
+                        <TextBlock Text="{Binding BookText}" 
+                                   TextWrapping="Wrap" 
+                                   FontSize="16" 
+                                   LineHeight="26"
+                                   FontFamily="Georgia, serif"
+                                   Foreground="#1F2937"
+                                   Margin="0,0,0,20"/>
+                    </ScrollViewer>
+                </TabItem>
+
+                <!-- Вкладка отзывов -->
+                <TabItem Header="Отзывы">
+                    <StackPanel Margin="10">
+                        <!-- Список отзывов -->
+                        <ItemsControl ItemsSource="{Binding Reviews}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Padding="0,10">
+                                        <Grid>
+                                            <StackPanel>
+                                                <TextBlock FontWeight="SemiBold">
+                                                    <Run Text="{Binding AuthorName}"/>
+                                                    <Run Text=" — "/>
+                                                    <Run Text="{Binding Rating}" Foreground="#F59E0B"/>
+                                                    <Run Text="/10"/>
+                                                </TextBlock>
+                                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Margin="0,5,0,5"/>
+                                                <!-- Кнопка жалобы на отзыв -->
+                                                <Button Content="🚩 Пожаловаться на отзыв" 
+                                                        Command="{Binding DataContext.ReportReviewCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                        CommandParameter="{Binding Id}" 
+                                                        Background="Transparent" Foreground="#EF4444" BorderThickness="0" Cursor="Hand" HorizontalAlignment="Left"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- Форма добавления нового отзыва -->
+                        <Border Background="White" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,20,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Оставить отзыв" FontWeight="Bold" Margin="0,0,0,10"/>
+                                <TextBox Text="{Binding NewReviewText, UpdateSourceTrigger=PropertyChanged}" 
+                                         AcceptsReturn="True" Height="80" TextWrapping="Wrap" Padding="5" Margin="0,0,0,10"/>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="Оценка:" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <Slider Value="{Binding NewReviewRating}" Minimum="1" Maximum="10" Width="150" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                                    <TextBlock Text="{Binding NewReviewRating}" FontWeight="Bold" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <Button Content="Отправить отзыв" Command="{Binding AddReviewCommand}" 
+                                        Background="#2E7D32" Foreground="White" Padding="10,6" Margin="0,15,0,0" HorizontalAlignment="Left"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</UserControl>
