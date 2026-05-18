@@ -93,11 +93,16 @@
                                Visibility="{Binding HasNoReviews, Converter={StaticResource BoolToVis}}"/>
 
                     <!-- Таблица отзывов (скрывается, если отзывов нет) -->
-                    <ListView ItemsSource="{Binding Reviews}" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              Visibility="{Binding HasNoReviews, Converter={StaticResource BoolToVis}, ConverterParameter=Inverse}">
+                    <ListView ItemsSource="{Binding Reviews}" 
+                              BorderThickness="0" 
+                              Background="Transparent" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListView.Style>
                             <Style TargetType="ListView">
+                                <!-- По умолчанию виден -->
+                                <Setter Property="Visibility" Value="Visible"/>
                                 <Style.Triggers>
+                                    <!-- Скрываем, если отзывов нет -->
                                     <DataTrigger Binding="{Binding HasNoReviews}" Value="True">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                     </DataTrigger>

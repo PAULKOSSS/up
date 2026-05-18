@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Windows;
 using up.Infrastructure;
@@ -99,6 +100,7 @@ namespace up.ViewModels
         private void LoadReviews()
         {
             var userReviews = Core.Context.Reviews
+                .Include(r => r.Books)
                 .Where(r => r.UserId == UserSession.UserId)
                 .Select(r => new ReviewDto
                 {

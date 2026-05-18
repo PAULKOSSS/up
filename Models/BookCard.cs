@@ -8,8 +8,6 @@
         public string ImageUrl { get; set; }
         public double? Rating { get; set; }
         public int? CurrentStatusId { get; set; }
-
-        // ✅ ДОБАВЛЕНО: статус заморозки
         public bool IsFrozen { get; set; }
     }
 }
